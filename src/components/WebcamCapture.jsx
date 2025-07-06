@@ -111,173 +111,170 @@ const WebcamCapture = ({
   const isGrid = layout === '6';
 
   return (
-    <div className="zoom-wrapper">
-      <div className="webcam-capture-row">
-        {/* Camera */}
-        <div className="camera-section">
-          <div className="camera-frame" style={{ border: `8px solid ${frameColor}`, position: 'relative' }}>
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-              style={{ filter, transform: 'scaleX(-1)' }}
-            />
-            {flash && <div className="flash-overlay"></div>}
-            {countdown !== null && (
-              <div className="countdown" style={{
-                position: 'absolute',
-                bottom: '8px',
-                width: '100%',
-                textAlign: 'center',
-                fontSize: '1.5rem',
-                color: '#FF99AF',
-                fontWeight: 'bold',
-              }}>
-                ⏱︎ {countdown}
-              </div>
-            )}
-          </div>
-          {photos.every(p => p === null) ? (
-            <button onClick={startCapture} className="capture-button">✧ Start Capture</button>
-          ) : (
-            <button onClick={retakePhotos} className="capture-button">⟳ Retake Another</button>
-          )}
-        </div>
+    <>
+      {/* 📱 Mobile Rotate Warning */}
+      <div className="mobile-rotate-warning">
+        <span className="rotate-emoji" role="img" aria-label="rotate">
+          🗘 If you're using a phone/tablet, please rotate your device to landscape.</span>
+      </div>
 
-        {/* Strip */}
-        <div className="strip-wrapper" style={{
-          position: 'relative',
-          width: `${stripWidth}px`,
-          height: `${stripHeight}px`,
-        }}>
-          <div className="strip-preview" style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: stripColor,
-            display: isGrid ? 'grid' : 'flex',
-            gridTemplateColumns: isGrid ? 'repeat(2, 1fr)' : undefined,
-            gridTemplateRows: isGrid ? 'repeat(3, 1fr)' : undefined,
-            gap: isGrid ? '6px' : undefined,
-            flexDirection: isGrid ? undefined : slotFlexDirection,
-            flexWrap: isGrid ? undefined : 'nowrap',
-            justifyContent: isGrid ? undefined : 'space-between',
-            alignItems: isGrid ? undefined : 'flex-start',
-            padding: '12px 12px 40px',
-            boxSizing: 'border-box',
-            position: 'relative',
-          }}>
-            {photos.map((photo, index) => (
-              <div
-                className="strip-slot"
-                key={index}
-                style={{
+      {/* 🎥 Main Content */}
+      <div className="zoom-wrapper">
+        <div className="webcam-capture-row">
+          {/* CAMERA SECTION */}
+          <div className="camera-section">
+            <div className="camera-frame" style={{ border: `8px solid ${frameColor}`, position: 'relative' }}>
+              <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                style={{ filter, transform: 'scaleX(-1)' }}
+              />
+              {flash && <div className="flash-overlay"></div>}
+              {countdown !== null && (
+                <div className="countdown" style={{
+                  position: 'absolute',
+                  bottom: '8px',
                   width: '100%',
-                  height: '100%',
-                  marginBottom: index === layoutCount - 1 ? 0 : '6px',
-                  background: '#fff',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {photo ? (
-                  <img
-                    src={photo}
-                    alt={`Pose ${index + 1}`}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                ) : (
-                  <div
-                    className="placeholder"
-                    style={{ width: '100%', height: '100%', background: '#FFC7D3' }}
-                  ></div>
-                )}
-              </div>
-            ))}
-
-            {/* Footer */}
-            <div className="strip-footer" style={{
-              position: 'absolute',
-              bottom: '8px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              textAlign: 'center',
-              fontFamily: "'Jua', sans-serif",
-              fontSize: '0.7rem',
-              color: '#738262',
-            }}>
-              <p className="strip-label">captured by v ♡</p>
-              <p className="strip-timestamp">{new Date().toLocaleString()}</p>
-            </div>
-          </div>
-
-          {/* Actions */}
-          {photos.every(photo => photo !== null) && (
-            <>
-              <div className="action-buttons">
-                <button className="icon-button" onClick={handleDownload} title="Download">
-                  <FontAwesomeIcon icon={faDownload} />
-                </button>
-                <button className="icon-button" onClick={handleEdit} title="Edit">
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
-              </div>
-
-              {showColorPicker && (
-                <div className="color-picker">
-                  <p>🎨 Choose frame color:</p>
-                  <div className="color-options">
-                    {[
-                      { name: 'White', code: '#FFFFFF' },
-                      { name: 'Black', code: '#000000' },
-                      { name: 'Pink', code: '#FF99AF' },
-                      { name: 'Purple', code: '#D8BFD8' },
-                      { name: 'Green', code: '#A8B897' },
-                      { name: 'Blue', code: '#ADD8E6' },
-                      { name: 'Yellow', code: '#FFFACD' },
-                      { name: 'Red', code: '#FFC7D3' },
-                    ].map(color => (
-                      <button
-                        key={color.name}
-                        onClick={() => setStripColor(color.code)}
-                        style={{
-                          backgroundColor: color.code,
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '50%',
-                          margin: '5px',
-                          border: '2px solid #ccc',
-                          cursor: 'pointer'
-                        }}
-                        title={color.name}
-                      />
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setShowColorPicker(false)}
-                    style={{
-                      marginTop: '10px',
-                      background: '#FF99AF',
-                      color: '#fff',
-                      padding: '6px 12px',
-                      border: 'none',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    Save Color
-                  </button>
+                  textAlign: 'center',
+                  fontSize: '1.5rem',
+                  color: '#FF99AF',
+                  fontWeight: 'bold',
+                }}>
+                  ⏱︎ {countdown}
                 </div>
               )}
-              <p className="save-message">✔ Done! You can now save your photostrip.</p>
-            </>
-          )}
+            </div>
+            {photos.every(p => p === null) ? (
+              <button onClick={startCapture} className="capture-button">✧ Start Capture</button>
+            ) : (
+              <button onClick={retakePhotos} className="capture-button">⟳ Retake Another</button>
+            )}
+          </div>
+
+          {/* STRIP SECTION */}
+          <div className="strip-wrapper" style={{
+            position: 'relative',
+            width: `${stripWidth}px`,
+            height: `${stripHeight}px`,
+          }}>
+            <div className="strip-preview" style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: stripColor,
+              display: 'flex',
+              flexDirection: slotFlexDirection,
+              flexWrap: isGrid ? 'wrap' : 'nowrap',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              padding: '12px 12px 50px',
+              boxSizing: 'border-box',
+              position: 'relative',
+            }}>
+              {photos.map((photo, index) => (
+                <div
+                  className="strip-slot"
+                  key={index}
+                  style={{
+                    width: isGrid ? '48%' : '100%',
+                    height: isGrid ? '32%' : `${(stripHeight - 60) / layoutCount}px`,
+                    marginBottom: index === layoutCount - 1 ? 0 : '6px',
+                    background: '#fff',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {photo ? (
+                    <img
+                      src={photo}
+                      alt={`Pose ${index + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div
+                      className="placeholder"
+                      style={{ width: '100%', height: '100%', background: '#FFC7D3' }}
+                    ></div>
+                  )}
+                </div>
+              ))}
+
+              {/* Footer */}
+              <div className="strip-footer" style={{
+                position: 'absolute',
+                bottom: '8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                textAlign: 'center',
+                fontFamily: "'Jua', sans-serif",
+                fontSize: '0.7rem',
+                color: '#738262',
+              }}>
+                <p className="strip-label">captured by v ♡</p>
+                <p className="strip-timestamp">{new Date().toLocaleString()}</p>
+              </div>
+            </div>
+
+            {/* DONE ACTIONS */}
+            {photos.every(photo => photo !== null) && (
+              <>
+                <div className="action-buttons">
+                  <button className="icon-button" onClick={handleDownload} title="Download">
+                    <FontAwesomeIcon icon={faDownload} />
+                  </button>
+                  <button className="icon-button" onClick={handleEdit} title="Edit">
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                </div>
+
+                {showColorPicker && (
+                  <div className="color-picker">
+                    <p>🎨 Choose frame color:</p>
+                    <div className="color-options">
+                      {[ /* color list */ ].map(color => (
+                        <button
+                          key={color.name}
+                          onClick={() => setStripColor(color.code)}
+                          style={{
+                            backgroundColor: color.code,
+                            width: '30px',
+                            height: '30px',
+                            borderRadius: '50%',
+                            margin: '5px',
+                            border: '2px solid #ccc',
+                            cursor: 'pointer'
+                          }}
+                          title={color.name}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => setShowColorPicker(false)}
+                      style={{
+                        marginTop: '10px',
+                        background: '#FF99AF',
+                        color: '#fff',
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      Save Color
+                    </button>
+                  </div>
+                )}
+                <p className="save-message">✅ Done! You can now save your photostrip.</p>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

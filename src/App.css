@@ -325,3 +325,28 @@ h1 {
   border-color: #FF99AF;
   background-color: #FFC7D3;
 }
+
+.mobile-rotate-warning {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: #333;
+  padding: 10px;
+  text-align: center;
+  gap: 8px;
+  font-family: 'Jua', sans-serif;
+}
+
+.rotate-emoji {
+  font-size: 12px;
+  color: #666; /* or your preferred color */
+  margin-left: 8px;
+}
+
+
+@media screen and (orientation: portrait) {
+  .mobile-rotate-warning {
+    display: flex;
+  }
+}
