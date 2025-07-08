@@ -112,16 +112,17 @@ const WebcamCapture = ({
 
   return (
     <>
-      {/* 📱 Mobile Rotate Warning */}
+      {/* Mobile Rotate Warning */}
       <div className="mobile-rotate-warning">
+  
         <span className="rotate-emoji" role="img" aria-label="rotate">
-          🗘 If you're using a phone/tablet, please rotate your device to landscape.</span>
+            🗘 If you're using a phone/tablet, please rotate your device to landscape.</span> 
       </div>
 
-      {/* 🎥 Main Content */}
+      {/* Main Content */}
       <div className="zoom-wrapper">
         <div className="webcam-capture-row">
-          {/* CAMERA SECTION */}
+          {/* Camera */}
           <div className="camera-section">
             <div className="camera-frame" style={{ border: `8px solid ${frameColor}`, position: 'relative' }}>
               <Webcam
@@ -153,7 +154,7 @@ const WebcamCapture = ({
             )}
           </div>
 
-          {/* STRIP SECTION */}
+          {/* Strip */}
           <div className="strip-wrapper" style={{
             position: 'relative',
             width: `${stripWidth}px`,
@@ -163,12 +164,15 @@ const WebcamCapture = ({
               width: '100%',
               height: '100%',
               backgroundColor: stripColor,
-              display: 'flex',
-              flexDirection: slotFlexDirection,
-              flexWrap: isGrid ? 'wrap' : 'nowrap',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              padding: '12px 12px 50px',
+              display: isGrid ? 'grid' : 'flex',
+              gridTemplateColumns: isGrid ? 'repeat(2, 1fr)' : undefined,
+              gridTemplateRows: isGrid ? 'repeat(3, 1fr)' : undefined,
+              gap: isGrid ? '6px' : undefined,
+              flexDirection: isGrid ? undefined : slotFlexDirection,
+              flexWrap: isGrid ? undefined : 'nowrap',
+              justifyContent: isGrid ? undefined : 'space-between',
+              alignItems: isGrid ? undefined : 'flex-start',
+              padding: '12px 12px 40px',
               boxSizing: 'border-box',
               position: 'relative',
             }}>
@@ -177,8 +181,8 @@ const WebcamCapture = ({
                   className="strip-slot"
                   key={index}
                   style={{
-                    width: isGrid ? '48%' : '100%',
-                    height: isGrid ? '32%' : `${(stripHeight - 60) / layoutCount}px`,
+                    width: '100%',
+                    height: '100%',
                     marginBottom: index === layoutCount - 1 ? 0 : '6px',
                     background: '#fff',
                     overflow: 'hidden',
@@ -213,12 +217,12 @@ const WebcamCapture = ({
                 fontSize: '0.7rem',
                 color: '#738262',
               }}>
-                <p className="strip-label">captured by v ♡</p>
+                <p className="strip-label" style={{ marginTop: '6px' }}>captured by v ♡</p>
                 <p className="strip-timestamp">{new Date().toLocaleString()}</p>
               </div>
             </div>
 
-            {/* DONE ACTIONS */}
+            {/* Actions */}
             {photos.every(photo => photo !== null) && (
               <>
                 <div className="action-buttons">
@@ -234,7 +238,16 @@ const WebcamCapture = ({
                   <div className="color-picker">
                     <p>🎨 Choose frame color:</p>
                     <div className="color-options">
-                      {[ /* color list */ ].map(color => (
+                      {[
+                        { name: 'White', code: '#FFFFFF' },
+                        { name: 'Black', code: '#000000' },
+                        { name: 'Pink', code: '#FF99AF' },
+                        { name: 'Purple', code: '#D8BFD8' },
+                        { name: 'Green', code: '#A8B897' },
+                        { name: 'Blue', code: '#ADD8E6' },
+                        { name: 'Yellow', code: '#FFFACD' },
+                        { name: 'Red', code: '#FFC7D3' },
+                      ].map(color => (
                         <button
                           key={color.name}
                           onClick={() => setStripColor(color.code)}
@@ -268,7 +281,7 @@ const WebcamCapture = ({
                     </button>
                   </div>
                 )}
-                <p className="save-message">✅ Done! You can now save your photostrip.</p>
+                <p className="save-message">✔ Done! You can now save your photostrip.</p>
               </>
             )}
           </div>
