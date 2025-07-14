@@ -79,8 +79,8 @@ const WebcamCapture = ({
   const handleDownload = () => {
     const strip = document.querySelector('.strip-preview');
     html2canvas(strip, {
-        scale: 3,       // Increase resolution
-        useCORS: true,  // Allow external fonts/images
+        scale: 3,       // increase resolution
+        useCORS: true,  // external fonts/images
     }).then((canvas) => {
         const link = document.createElement('a');
         link.download = 'photostrip.png';
